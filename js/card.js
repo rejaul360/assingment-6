@@ -1,14 +1,15 @@
-const dataLoadhub = () => {
+const loadAiHub = () => {
     toggleSpinner(true)
+    // get data to fetch
     const URL = `https://openapi.programming-hero.com/api/ai/tools`
     fetch(URL)
         .then(res => res.json())
         .then(data => displayData(data.data.tools));
 }
-
-const displayData = aiHubs => {
+// Display Ai hub
+const displayData = aiHubs => { 
     const aiContainer = document.getElementById('ai_container')
-
+    // --------Slice aiHub ----------
     const seeMore = document.getElementById('see_more');
     if (aiHubs.length > 6) {
         aiHubs = aiHubs.slice(0, 6);
@@ -46,7 +47,7 @@ const displayData = aiHubs => {
     toggleSpinner(false);   
 }
 
-
+// toggleSpinner handler area
 const toggleSpinner = isLoader => {
     const spinnerSections = document.getElementById('spinner_section');
     if (isLoader) {
@@ -58,15 +59,14 @@ const toggleSpinner = isLoader => {
 document.getElementById('btn_seemore').addEventListener('click', function () {
     toggleSpinner(true)
     const loadAiHub = () => {
-
+        // get data to fetch
         const URL = `https://openapi.programming-hero.com/api/ai/tools`
         fetch(URL)
             .then((res) => res.json())
             .then((data) => displayData(data.data.tools));
     }
-
+    // Display Ai hub
     const displayData = aiHubs => {
-        console.log(aiHubs);
         const aiContainer = document.getElementById('ai_container')
         aiContainer.innerHTML = "";
 
@@ -77,7 +77,7 @@ document.getElementById('btn_seemore').addEventListener('click', function () {
         }
         aiHubs.forEach(aihub => {
             const aiDiv = document.createElement('div');
-            console.log(aihub.id);
+
             aiDiv.classList.add('col');
             aiDiv.innerHTML = `
             <div class="card h-100 p-2">
@@ -116,21 +116,24 @@ const  loadAiData = id => {
     .then(data => displayloadAiData(data))
 };
 const displayloadAiData = (aiInfo) =>{
-    console.log(aiInfo.data);
-
+    // console.log(aiInfo.data);
+    // Set daynamic title
     const aiTitle = document.getElementById('ai_title');
     aiTitle.innerText = aiInfo.data.description;
 
-
+    // set price basic 
     const pricing = document.getElementById('pricing_1')
     pricing.innerText = aiInfo.data?.pricing?.[0]?.price ? aiInfo.data.pricing[0].price : 'Free of Cost/Basic';
 
+    // set peice pro
     const pricePro = document.getElementById('pricing_2');
     pricePro.innerText = aiInfo.data?.pricing?.[1]?.price ? aiInfo.data.pricing[1].price : 'Free of Cost/Basic';
 
+    //set contact 
     const contact = document.getElementById('pricing_3')
     contact.innerText = aiInfo.data?.pricing?.[2]?.price ? aiInfo.data.pricing[2].price : 'Free of Cost/Basic';
 
+    // features area Desing
     const feature_area = document.getElementById('featuers');
     feature_area.innerHTML = `
     <h6 class="fw-bold">Features</h6>
@@ -140,7 +143,7 @@ const displayloadAiData = (aiInfo) =>{
         <li><small>${aiInfo.data.features[3].feature_name ? aiInfo.data.features[3].feature_name : 'No data found'}</small></li>
     </ul>
     `;   
-
+    // features area Desing
     const Integrations_area = document.getElementById('integrations');
     Integrations_area.innerHTML = `
     <h6 class="fw-bold">Integrations</h6>
@@ -153,22 +156,27 @@ const displayloadAiData = (aiInfo) =>{
     const secondContainer = document.getElementById('second_container')
     secondContainer.innerHTML = `
     <div class="card w-full" >
-    <button class="bg-danger text-white w-50 position-absolute top-0 end-0 border-0 mt-1 rounded-2">${aiInfo.data.accuracy.score ? aiInfo.data.accuracy.score: ' '}% accuracy</button>
+    <button class="bg-danger text-white w-50 position-absolute top-0 end-0 border-0 mt-1 rounded-2 id="accuracy_item" ">${aiInfo.data.accuracy.score ? aiInfo.data.accuracy.score: ' '}% accuracy</button>
     <img src="${aiInfo.data.image_link[0]}" class="card-img-top p-2" alt="...">
     <div class="card-body">
-      <h5 class="card-title text-center fw-bold">${aiInfo.dat?.input_output_examples?.[0]?.input ? aiInfo.dat.input_output_examples[0].input : "Can you give any Example!!" }</h5>
+      <h5 class="card-title text-center fw-bold">${aiInfo.data?.input_output_examples?.[0]?.input ? aiInfo.data.input_output_examples[0].input : "Can you give any Example!!" }</h5>
       <p class="card-text text-center text-muted"><small  class=" text-muted">${aiInfo.data?.input_output_examples?.[0]?.output ? aiInfo.data.input_output_examples[0].output : 'No! Not Yet!! Take a break!!!'}</small></p>
     </div>
     </div>   `
 }
-dataLoadhub()
 
+
+loadAiHub()
+
+
+
+// sort by date 
 document.getElementById('sort_btn').addEventListener('click' , function(){
-    const parrenAiContainer = document.getElementById('ai_container');
-    console.log(parrenAiContainer.children);
-    
-    const cardArry = Array.from(parrenAiContainer.children);
-    console.log(cardArry);
+    const aiContainer = document.getElementById('ai_container');
+    // console.log(aiContainer.children);
+
+    const cardArry = Array.from(aiContainer.children);
+
     cardArry.sort((card1, card2) => {
         let date1 = new Date (card1.querySelector(".date").innerText)
         let date2 = new Date (card2.querySelector(".date").innerText)
@@ -182,7 +190,6 @@ document.getElementById('sort_btn').addEventListener('click' , function(){
         }
     })
         for (cards of cardArry ){
-            parrenAiContainer.appendChild(cards);
+            aiContainer.appendChild(cards);
         }
-    console.log(cardArry);
 })
